@@ -1,0 +1,93 @@
+ >>> city = City.objects.get(id=1)
+SELECT "catalog_city"."id",
+       "catalog_city"."name"
+  FROM "catalog_city"
+ WHERE "catalog_city"."id" = 1
+ LIMIT 21
+Execution time: 0.000799s [Database: default]
+
+ >>> provider = Provider.objects.get(id=1)
+SELECT "catalog_provider"."id",
+       "catalog_provider"."name",
+       "catalog_provider"."city_id"
+  FROM "catalog_provider"
+ WHERE "catalog_provider"."id" = 1
+ LIMIT 21
+Execution time: 0.000225s [Database: default]
+
+ >>> provider.city
+SELECT "catalog_city"."id",
+       "catalog_city"."name"
+  FROM "catalog_city"
+ WHERE "catalog_city"."id" = 1
+ LIMIT 21
+Execution time: 0.000127s [Database: default]
+<City: Kyiv>
+
+ >>> client = Client.objects.create(name = 'Student', city_id = 1)
+INSERT INTO "catalog_client" ("name", "city_id")
+VALUES ('Student', 1) RETURNING "catalog_client"."id"
+Execution time: 0.005704s [Database: default]
+
+>>> foods = Stuff.objects.get(id=4)
+SELECT "catalog_stuff"."id",
+       "catalog_stuff"."name"
+  FROM "catalog_stuff"
+ WHERE "catalog_stuff"."id" = 4
+ LIMIT 21
+Execution time: 0.000196s [Database: default]
+
+>>> drugs = Stuff.objects.get(id=5)
+SELECT "catalog_stuff"."id",
+       "catalog_stuff"."name"
+  FROM "catalog_stuff"
+ WHERE "catalog_stuff"."id" = 5
+ LIMIT 21
+Execution time: 0.000133s [Database: default]
+
+>>> alcohol = Stuff.objects.get(id=6)
+SELECT "catalog_stuff"."id",
+       "catalog_stuff"."name"
+  FROM "catalog_stuff"
+ WHERE "catalog_stuff"."id" = 6
+ LIMIT 21
+Execution time: 0.000129s [Database: default]
+
+>>> electronics = Stuff.objects.get(id=7)
+SELECT "catalog_stuff"."id",
+       "catalog_stuff"."name"
+  FROM "catalog_stuff"
+ WHERE "catalog_stuff"."id" = 7
+ LIMIT 21
+Execution time: 0.000129s [Database: default]
+
+>>> client.stuff.add(foods, drugs, alcohol, electronics)
+BEGIN
+Execution time: 0.000055s [Database: default]
+INSERT
+    OR
+IGNORE INTO "catalog_client_stuff" ("client_id", "stuff_id")
+VALUES (1, 4), (1, 5), (1, 6), (1, 7)
+Execution time: 0.005836s [Database: default]
+
+>>> client.stuff.filter(name__startswith = 'foo')
+SELECT "catalog_stuff"."id",
+       "catalog_stuff"."name"
+  FROM "catalog_stuff"
+ INNER JOIN "catalog_client_stuff"
+    ON ("catalog_stuff"."id" = "catalog_client_stuff"."stuff_id")
+ WHERE ("catalog_client_stuff"."client_id" = 1 AND "catalog_stuff"."name" LIKE 'foo%' ESCAPE '\')
+ LIMIT 21
+Execution time: 0.000312s [Database: default]
+<QuerySet [<Stuff: Foods>]>
+
+>>> client.city
+SELECT "catalog_city"."id",
+       "catalog_city"."name"
+  FROM "catalog_city"
+ WHERE "catalog_city"."id" = 1
+ LIMIT 21
+Execution time: 0.000121s [Database: default]
+<City: Kyiv>
+
+
