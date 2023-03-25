@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hypotenuse</title>
+</head>
+<body>
+    <h1>Hypotenuse</h1>
+    <form action="{% url 'triangle:triangle' %}" method="get">
+        <p>{{ form.base.label_tag }} {{ form.base }}</p>
+        <p>{{ form.altitude.label_tag }} {{ form.altitude }}</p>
+    <input type="Submit" name="OK" value="OK">
+    </form>
+    {% if hypotenuse %}
+        <p>Hypotenuse: {{ hypotenuse }}</p>
+    {% endif %}
+</body>
+</html>
