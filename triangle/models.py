@@ -7,5 +7,4 @@ class Person(models.Model):
     email = models.EmailField(max_length=100)
 
     def __str__(self):
-        return f'{self.first_name} {self.last_name}'
-# Create your models here.
+        return f'{self.first_name} {self.last_name} {self.email}'

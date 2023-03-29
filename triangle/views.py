@@ -21,26 +21,36 @@ def triangle(request):
     return render(request, 'triangle/triangle.html', {'form': my_form, 'hypotenuse': hypotenuse})
 
 
-def person(request):
-    form = PersonForm(request.POST or None)
-    if request.method == "POST":
-        if form.is_valid():
-            obj = Person.objects.create(**form.cleaned_data)
-            return redirect('triangle:update_person', obj.id)
-    elif request.method == 'GET':
-        context = {
-            "form": form
-        }
-        return render(request, 'triangle/create_person.html', context)
+def create_person(request):
+    if request.method == 'POST':
+        user_form = PersonForm(request.POST)
+
+        if user_form.is_valid():
+            user_form.save()
+            return redirect('triangle:persons_all')
+
+    else:
+        user_form = PersonForm()
+
+    return render(request, 'triangle/create_person.html', {'form': user_form})
+
+
+def persons_all(request):
+    all_persons = Person.objects.all()
+    return render(request, 'triangle/all_persons.html', {'users': all_persons})
 
 
 def update_person(request, pk):
-    user = get_object_or_404(Person, pk=pk)
+    obj = get_object_or_404(Person, pk=pk)
+
     if request.method == 'POST':
-        form = PersonForm(request.POST, instance=user)
-        if form.is_valid():
-            obj = form.save()
-            return redirect('triangle:update_person', obj.id)
-    elif request.method == 'GET':
-        form = PersonForm(instance=user)
-    return render(request, 'triangle/person.html', {"form": form, 'obj': user})
+        user_form = PersonForm(request.POST, instance=obj)
+
+        if user_form.is_valid():
+            obj = user_form.save()
+            return redirect('triangle:person')
+
+    else:
+        user_form = PersonForm(instance=obj)
+
+    return render(request, 'triangle/update_person.html', {'form': user_form, 'obj': obj})
