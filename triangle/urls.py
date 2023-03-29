@@ -1,11 +1,12 @@
 from django.urls import path
 
 from . import views
-from .views import person, update_person
+
 
 app_name = 'triangle'
 urlpatterns = [
     path('triangle/', views.triangle, name='triangle'),
-    path('person', person, name='person'),
-    path('person/<int:pk>', update_person, name='update_person'),
+    path('person/', views.persons_all, name='persons_all'),
+    path('person/create', views.create_person, name='create_person'),
+    path('person/<int:pk>', views.update_person, name='update_person'),
 ]

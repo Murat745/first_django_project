@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Create</title>
 </head>
 <body>
-
+    <h1>Create a person</h1>
+    <form action="{% url 'triangle:create_person' %}" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+    <input type="Submit" name="Submit" value="Submit">
+    </form>
 </body>
 </html>
